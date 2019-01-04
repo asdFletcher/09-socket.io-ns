@@ -34,13 +34,17 @@ We have deployed a front-end application written in React that will connect a so
   * For anyone connected to this namespace AND in the `lowercase` room
     * `emit()` an event called `_letter` with the lowercase value of the current letter
 
-#### app.js
+#### app.js (provided)
 * Connects to both the `letter` and `number` namespaces
 * Runs an interval and emits the `next-number` and `next-letter` events periodically.
 
+#### client.js (provided)
+* This will assist you in testing. Effectively, it does exactly what the website does -- connects to the server and listens for `number` and `letter` events in the right namespaces.
+* If you fire up your server, fire up this client, and then run the app.js, you should see numbers and letters flying out.  This is a pretty good indication that the deployed application will also work.
+
 ### Testing
 * Compose your server in as modular a manner as possible to support testing.
-* You will want to extract any 'non-event' functionaly 
+* You will want to extract any 'non-event' functionality 
 * Write tests around all of your units
 * Test event handlers (not events themselves)
 
