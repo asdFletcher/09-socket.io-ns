@@ -26,7 +26,7 @@ numbers.on('connect', (socket)=>{
   socket.on('next-number', () => {
     socket.broadcast.emit('number', counter);
     socket.broadcast.to('negative').emit('_number', counter * -1);
-    incrementNumber();
+    counter = incrementNumber(counter);
   });
 });
 
@@ -45,7 +45,7 @@ letters.on('connect', (socket)=>{
     console.log(`The letters are at: ${letter}`);
     socket.broadcast.emit('letter', letter);
     socket.broadcast.to('lowercase').emit('_letter', getLowerCase());
-    incrementLetter();
+    letter = incrementLetter(letter);
   });
 });
 
@@ -53,7 +53,7 @@ function getLowerCase(){
   return letter.toLowerCase();
 }
 
-function incrementLetter(){
+function incrementLetter(letter){
   let currentLetterCharCode = letter.charCodeAt();
   // if at z reset to A
   if (currentLetterCharCode === 122){
@@ -65,9 +65,17 @@ function incrementLetter(){
   }
   let nextLetterCharCode = currentLetterCharCode+1;
   let nextLetter = String.fromCharCode(nextLetterCharCode);
+  console.log({letter});
   letter = nextLetter;
+  return letter;
 }
 
-function incrementNumber(){
-  counter++;
+function incrementNumber(counter){
+  return counter = counter + 1;
+}
+
+module.exports = {
+  getLowerCase,
+  incrementLetter,
+  incrementNumber,
 }
