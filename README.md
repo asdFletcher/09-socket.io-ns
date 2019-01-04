@@ -6,10 +6,10 @@
 ### Author: Fletcher LaRue
 
 ### Links and Resources
-[![Build Status]
+[![Build Status](https://www.travis-ci.com/asdFletcher/09-socket.io-ns.svg?branch=master)](https://www.travis-ci.com/asdFletcher/09-socket.io-ns)
 
 * [repo](https://github.com/asdFletcher/09-socket.io-ns)
-* [travis]()
+* [travis](https://www.travis-ci.com/asdFletcher/09-socket.io-ns)
 <!-- * [back-end](http://xyz.com)
 * [front-end](http://xyz.com) -->
 
