@@ -6,116 +6,99 @@
 ### Author: Fletcher LaRue
 
 ### Links and Resources
-[![Build Status]
+[![Build Status](https://www.travis-ci.com/asdFletcher/09-socket.io-ns.svg?branch=master)](https://www.travis-ci.com/asdFletcher/09-socket.io-ns)
 
 * [repo](https://github.com/asdFletcher/09-socket.io-ns)
-* [travis]()
+* [travis](https://www.travis-ci.com/asdFletcher/09-socket.io-ns)
 <!-- * [back-end](http://xyz.com)
 * [front-end](http://xyz.com) -->
 
 --- 
 ---
 ### Description:
-Project for Code Fellows 401 to 
+Develops a server that accepts connections to 2 namespaces: `numbers` and `letters`, each with a room (`negative` and `lowercase`) that can be optionally joined by a client.
+
+There is an `app.js` file that runs an interval and emits specific events to the server periodically, for testing.
+
+There is an existing front-end application (not made as part of this project that is meant to test the functionality of `server.js`. 
+
+It is located [here](https://pmww0ww42q.codesandbox.io/). 
+
+It is written in React and connects to a `socket.io` server running at `http://localhost:3000` and to the namespaces and rooms specified below. The existing application will automatically connect and respond to events and display the data published by your server.
+
+The `server.js` is the main portion of the project and handles events emitted periodically by `app.js`. This simulates some sort of user interaction. There is also a `client.js` file that is for testing the events emitted by `server.js`. The purpose of this is to test the output without being tied to the 'un-changeable' React app. It is not strictly necessary but is handy. 
 
 #### `server.js` description
 - the socket.io server
-- use port 3000
-- listens for file-save
-    - emit an event when it happens
-- listens for file-error
-    - emit an event when it happens
-- require socket.io
-
-#### `logger.js` description
-    - listens to server
-    - logs events
+- uses port 3000
+- defines global variables to be sent to subscribers
+    - `number` starts at `0`
+    - `letter` is on a loop: `A --> Z --> a --> z --> a ...`
+- The server has 2 namespaces: `numbers` and `letters`
+    - `numbers` has 1 room: `negative`
+    - `letters` has 1 room: `lowercase`
+- listens for event `next-number`
+    - when this happens:
+        - emits an event `number`, and `number` to the namespace `numbers`
+        - emits an event `_number`, and negative `number` to the room `negative` (in `numbers`)
+        - increments `number` by 1
+- listens for event `next-letter`
+    - when this happens:   
+        - emits an event `letter`, and `letter` to the namespace `letters`
+        - emits an event `_letter`, and lowercase `letter` to the room `lowercase` (in `letters`)
+        - increments `letter` by 1
+- allows clients to connect to the namespaces, or rooms
 
 #### `app.js` description
-- accept file name from CLI
-- reads in a file
-    - makes changes to it
-    - saves the data to the file
-    - uses promises
-    - has separate functions
-    - File reading/Writing/Uppercasing should happen in one module
-    - Each operation should be in a separate function
-    - Read/Write should be done in promises, not callbacks
-- connected to server.js
+- connects to the server
+- emits event 'next-number' every so often
+- emits event 'next-letter' every so often
+- does not specify the actual letter or number, just the event
+
+#### `client.js` description
+- connects to the server
+- connects to the namespace `numbers`
+- connects to the namespace `letters`
+- connects to the room `negative`
+- connects to the room `lowercase`
+- logs all incoming events
 
 
 ---
 ### Files
-#### `app.js`
-#### `logger.js`
 #### `server.js`
+#### `app.js`
+#### `client.js`
 
 #### Test files
-#### `app.test.js`
-#### `logger.test.js`
 #### `server.test.js`
+
 ---
 
 ### Modules
 ##### Exported Values and Methods for the following files:
-#### `app.js`
-- ###### `alterFile(filePath)`
-- ###### `handleFileData(filePath, data)`
-- ###### `handleWriteFile(filePath, newData)`
-
-#### `logger.js`
-- ###### `logReadSuccess(filePath, data)`
-- ###### `logWriteSuccess(filePath)`
-- ###### `logFileError(filePath, err)`
-
 #### `server.js`
-- ###### `handleFileRead(filePath, data, socket)`
-- ###### `handleFileWrite(filePath, socket)`
-- ###### `handleFileError(filePath, err, socket)`
+- ###### `getLowerCase()`
+- ###### `incrementLetter()`
+- ###### `incrementNumber()`
+
+#### `app.js`
+- none, since this file is primarily used for testing `server.js`
+
+#### `client.js`
+- none, since this file is primarily used for testing `server.js`
 
 --- 
 
-#### `app.js`
-- ###### `alterFile(filePath)`
-    * requires 1 parameter
-    * given a filePath alters the data in that file
-    * asyncronously reads file data
-- ###### `handleFileData(filePath, data)`
-    * requires 2 parameters 
-    * given `filePath` and `data`, capitalizes the words in the file
-    * `filePath` specifies the location of the file to be altered
-    * `data` are the contents of the file in buffer format
-    * assumes that the file data is valid (no type checking of data)    
-- ###### `handleWriteFile(filePath, newData)`
-    * requires 2 parameters 
-    * given `filePath` and `data`, capitalizes the words in the file
-    * `filePath` specifies the location of the file to be altered
-    * `data` are the new file contents in buffer format
-    * asyncronously writes the new file data
-
-#### `logger.js`
-`logger.js` logs events from the server to the console.
-
-* ###### `logReadSuccess(filePath, data)`
-    * listens for file-read success
-    * accepts a filePath and data which are logged
-* ###### `logWriteSuccess(filePath)`
-    * listens for file-write success
-    * accepts a filePath which is logged
-* ###### `logFileError(filePath, err)`
-    * listens for file-errors (write or read)
-    * accepts a filePath and an error which are logged
-
 #### `server.js`
-- ###### `handleFileRead(filePath, data, socket)`
-    * requires 3 parameters
+- ###### `getLowerCase()`
+    * requires 0 parameters
     * logs the parameters to the console.
-- ###### `handleFileWrite(filePath, socket)`
-    * requires 2 parameters
-    * logs the parameters to the console.
-- ###### `handleFileError(filePath, err, socket)`
-    * requires 3 parameters
-    * logs the parameters to the console.
+- ###### `incrementLetter()`
+    * requires 0 parameters
+    * increments the global letter by 1 through its loop
+- ###### `incrementNumber()`
+    * requires the global number by 1
 
 
 ### Testing
@@ -190,9 +173,19 @@ Instructions for replicating the tests for this project are as follows:
 ### Usage
 
 Initialization routine:
-- start the server
-- start the logger
-- run the application
+- start `server.js`:
+    ```JavaScript
+    node server.js
+    ```
+- connect `app.js`:
+    ```JavaScript
+    node app.js
+    ```
+- connect `client.js`:
+    ```JavaScript
+    node client.js
+    ```
+- Alternatively: refresh the react app [here](https://pmww0ww42q.codesandbox.io/)
 
 --- 
 
